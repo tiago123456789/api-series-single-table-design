@@ -9,6 +9,8 @@
     "typescript": "^5.1.6"
   },
   "scripts": {
+    "deploy:production": "sls deploy --stage production --aws-profile tiago",
+    "deploy:staging": "sls deploy --stage staging --aws-profile tiago",
     "start:dev": "sls offline start"
   },
   "dependencies": {
