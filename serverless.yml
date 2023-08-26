@@ -1,0 +1,155 @@
+service: aws-serverless-typescript-api
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, "dev"}
+  region: us-east-1
+  environment:
+    TABLE_NAME: {Ref: MoviesTable}
+    JWT_SECRET: ${file(./serverless.env.yml):${self:provider.stage}.jwt_secret}
+
+  iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+    - "dynamodb:BatchGetItem"
+    - "dynamodb:ConditionCheckItem"
+    - "dynamodb:GetItem"
+    - "dynamodb:PutItem"
+    - "dynamodb:Query"
+    - "dynamodb:UpdateItem"
+    Resource:
+    - Fn::GetAtt:
+      - MoviesTable
+      - Arn
+
+plugins:
+- serverless-offline
+- serverless-plugin-typescript
+
+# you can add packaging information here
+#package:
+#  patterns:
+#    - '!exclude-me.js'
+#    - '!exclude-me-dir/**'
+#    - include-me.js
+#    - include-me-dir/**
+
+functions:
+  updateSerie:
+    handler: functions/Serie.updateSerie
+    timeout: 10
+    events:
+    - httpApi:
+        path: /series/{id}
+        method: put
+  getSerieById:
+    handler: functions/Serie.getSerieById
+    timeout: 10
+    events:
+    - httpApi:
+        path: /series/{id}
+        method: get
+  getSeries:
+    handler: functions/Serie.getSeries
+    events:
+    - httpApi:
+        path: /series
+        method: get
+  createSerie:
+    handler: functions/Serie.createSerie
+    events:
+    - httpApi:
+        path: /series
+        method: post
+
+  createSeason:
+    handler: functions/Season.createSeason
+    events:
+    - httpApi:
+        path: /series/{id}/seasons
+        method: post
+
+  updateSeason:
+    handler: functions/Season.updateSeason
+    events:
+    - httpApi:
+        path: /series/{serieId}/seasons/{id}
+        method: put
+
+  createEpisode:
+    handler: functions/Episode.createEpisode
+    events:
+    - httpApi:
+        path: /series/{serieId}/seasons/{seasonId}/episodes
+        method: post
+
+  updateEpisode:
+    handler: functions/Episode.updateEpisode
+    events:
+    - httpApi:
+        path: /series/{serieId}/seasons/{seasonId}/episodes/{id}
+        method: put
+
+  createPlatform:
+    handler: functions/Platform.createPlatform
+    events:
+    - httpApi:
+        path: /series/{id}/platforms
+        method: post
+
+  updatePlatform:
+    handler: functions/Platform.updatePlatform
+    events:
+    - httpApi:
+        path: /series/{serieId}/platforms/{id}
+        method: put
+
+  createActor:
+    handler: functions/Actor.createActor
+    events:
+    - httpApi:
+        path: /series/{id}/actors
+        method: post
+
+  updateActor:
+    handler: functions/Actor.updateActor
+    events:
+    - httpApi:
+        path: /series/{serieId}/actors/{id}
+        method: put
+
+  createUser:
+    handler: functions/Auth.createUser
+    events:
+    - httpApi:
+        path: /auth/users
+        method: post
+
+  authenticate:
+    handler: functions/Auth.authenticate
+    events:
+    - httpApi:
+        path: /auth/users/login
+        method: post
+
+
+resources:
+  Resources:
+    MoviesTable:
+      DeletionPolicy: Retain
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${file(./serverless.env.yml):${self:provider.stage}.table}
+        AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+        KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+        BillingMode: "PAY_PER_REQUEST"
