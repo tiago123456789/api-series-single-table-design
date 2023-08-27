@@ -31,6 +31,28 @@ export default class Season extends Base {
         }
     }
 
+    async hasSeasonById(id: string): Promise<boolean>  {
+        try {
+            const client = getClient();
+            // @ts-ignore
+            const registers = await client
+                .query({
+                    TableName: "MoviesTable",
+                    KeyConditionExpression: "PK = :pk and SK = :sk",
+                    ExpressionAttributeValues: {
+                        ":pk": { S: this.pk },
+                        ":sk": { S: id }
+                    }
+                })
+                .promise();
+
+            return (registers.Items?.length as number) > 0
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     async create() {
         try {
             const client = getClient();

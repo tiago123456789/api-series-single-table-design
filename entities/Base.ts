@@ -13,4 +13,5 @@ export abstract class Base {
     }
 
     abstract toItem(): Record<string, unknown>;
+
 }

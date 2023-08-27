@@ -9,9 +9,11 @@
     "typescript": "^5.1.6"
   },
   "scripts": {
-    "deploy:production": "sls deploy --stage production --aws-profile tiago",
-    "deploy:staging": "sls deploy --stage staging --aws-profile tiago",
-    "start:dev": "sls offline start"
+    "deploy-to-create-resource:production": "sls deploy --config ./serverless-create-resources-deploy-lambdas.yml --stage production --aws-profile tiago",
+    "deploy-to-create-resource:staging": "sls deploy --config ./serverless-create-resources-deploy-lambdas.yml --stage staging --aws-profile tiago",
+    "deploy:production": "sls deploy --config ./serverless-deploy-lambdas.yml --stage production --aws-profile tiago",
+    "deploy:staging": "sls deploy --config ./serverless-deploy-lambdas.yml --stage staging --aws-profile tiago",
+    "start:dev": "sls offline start --config serverless-deploy-lambdas.yml"
   },
   "dependencies": {
     "aws-sdk": "^2.1440.0",

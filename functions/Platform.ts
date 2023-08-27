@@ -3,6 +3,14 @@
 import * as yup from "yup";
 import { getValidationErrors } from "../utils/Validator";
 import Platform from "../entities/Platform";
+import PlatformService from "../services/Platform";
+import Serie from "../entities/Serie";
+import HandlerResponseException from "../utils/HandlerResponseExeption";
+
+const platformService = new PlatformService(
+  new Platform(undefined, undefined),
+  new Serie(undefined, undefined, undefined)
+);
 
 export const createPlatform = async (event: { [key: string]: any }) => {
   const id = event.pathParameters.id;
@@ -25,18 +33,21 @@ export const createPlatform = async (event: { [key: string]: any }) => {
     }
   }
 
-  const platform: Platform = new Platform(body.name, id)
-
-  await platform.create()
-
-  return {
-    statusCode: 201,
-    body: JSON.stringify(
-      {
-      },
-      null,
-      2
-    ),
+  try {
+    const platform: Platform = new Platform(body.name, id)
+    await platformService.create(id, platform)
+  
+    return {
+      statusCode: 201,
+      body: JSON.stringify(
+        {
+        },
+        null,
+        2
+      ),
+    }
+  } catch(error: any) {
+    return HandlerResponseException.handle(error);
   }
 }
 
@@ -63,16 +74,21 @@ export const updatePlatform = async (event: { [key: string]: any }) => {
     }
   }
 
-  const platform: Platform = new Platform(body.name, serieId)
-  await platform.update(`Platform#${id}`, platform)
-
-  return {
-    statusCode: 204,
-    body: JSON.stringify(
-      {},
-      null,
-      2
-    ),
+  try {
+    const platform: Platform = new Platform(body.name, serieId)
+    await platformService.update(serieId, id, platform);
+  
+    return {
+      statusCode: 204,
+      body: JSON.stringify(
+        {},
+        null,
+        2
+      ),
+    }
+  } catch(error: any) {
+    return HandlerResponseException.handle(error);
   }
+  
 }
 

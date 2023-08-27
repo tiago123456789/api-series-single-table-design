@@ -36,7 +36,7 @@ export default class Serie extends Base {
         }
     }
 
-    async create() {
+    async create(): Promise<void> {
         try {
             const client = getClient();
             // @ts-ignore
@@ -80,7 +80,7 @@ export default class Serie extends Base {
         }
     }
 
-    async findById(sk: string) {
+    async findById(sk: string): Promise<{ [key: string]: any }> {
         try {
             const client = getClient();
             // @ts-ignore
@@ -108,38 +108,38 @@ export default class Serie extends Base {
             const platforms: any[] = [];
             const actors: any[] = [];
             const seasons: any[] = [];
-            const mapSeasonByIndex: { [ key: string ]: any } = {}
+            const mapSeasonByIndex: { [key: string]: any } = {}
             const episodes: any[] = [];
             seasonsAndEpisodes.Items?.forEach(item => {
-                const isPlatform = (item?.SK.S as string).indexOf("Platform") > -1;
-                const isEpisode = (item?.SK.S as string).indexOf("Episode") > -1;
-                const isActor =  (item?.SK.S as string).indexOf("Actor") > -1;
+                const isPlatform = (item?.SK?.S as string).indexOf("Platform") > -1;
+                const isEpisode = (item?.SK?.S as string).indexOf("Episode") > -1;
+                const isActor = (item?.SK?.S as string).indexOf("Actor") > -1;
                 if (isActor) {
-                    const id = (item?.SK.S as string).split("#")[1]
+                    const id = (item?.SK?.S as string).split("#")[1]
                     actors.push({
                         id,
-                        name: item?.name.S,
-                        image: item?.image.S,
+                        name: item?.name?.S,
+                        image: item?.image?.S,
                     })
                 } else if (isPlatform) {
-                    const id = (item?.SK.S as string).split("#")[1]
+                    const id = (item?.SK?.S as string).split("#")[1]
                     platforms.push({
                         id,
-                        name: item?.name.S,
+                        name: item?.name?.S,
                     });
                 } else if (isEpisode) {
                     episodes.push({
-                        id: item?.SK.S,
-                        title: item?.title.S,
-                        description: item?.description.S,
-                        video: item?.video.S,
-                        thumb: item?.thumb.S
+                        id: item?.SK?.S,
+                        title: item?.title?.S,
+                        description: item?.description?.S,
+                        video: item?.video?.S,
+                        thumb: item?.thumb?.S
                     })
                 } else {
-                    const seasonId = (item?.SK.S as string).split("#")[1]
+                    const seasonId = (item?.SK?.S as string).split("#")[1]
                     seasons.push({
                         id: seasonId,
-                        name: item?.name.S,
+                        name: item?.name?.S,
                     });
                     const index = seasons.length - 1;
                     const id = seasons[index].id
@@ -148,7 +148,7 @@ export default class Serie extends Base {
             });
 
             episodes.forEach(item => {
-                const seasonAndEpisodeId = item.id.split("#Episode");
+                const seasonAndEpisodeId = item.id.split("#Episode#");
                 const seasonId = seasonAndEpisodeId[0].split("#")[1]
                 const indexOfSeason = mapSeasonByIndex[seasonId];
                 if (indexOfSeason) {
@@ -177,7 +177,30 @@ export default class Serie extends Base {
         }
     }
 
-    async update(sk: string, serie: Serie) {
+
+    async hasSerieById(sk: string): Promise<boolean> {
+        try {
+            const client = getClient();
+            // @ts-ignore
+            const registers = await client
+                .query({
+                    TableName: "MoviesTable",
+                    KeyConditionExpression: "PK = :pk and SK = :sk",
+                    ExpressionAttributeValues: {
+                        ":pk": { S: this.pk },
+                        ":sk": { S: sk }
+                    }
+                })
+                .promise();
+
+            return (registers.Items?.length as number) > 0
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async update(sk: string, serie: Serie): Promise<void> {
         try {
             const client = getClient();
             const keys = this.keys();

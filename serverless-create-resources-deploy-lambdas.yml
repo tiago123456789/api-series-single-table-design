@@ -6,8 +6,15 @@ provider:
   runtime: nodejs18.x
   stage: ${opt:stage, "dev"}
   region: us-east-1
+  httpApi:
+    authorizers:
+      Authorizer:
+        payloadVersion: 2.0
+        enableSimpleResponses: true
+        type: request
+        functionName: authorizer
   environment:
-    TABLE_NAME: {Ref: MoviesTable}
+    TABLE_NAME: ${file(./serverless.env.yml):${self:provider.stage}.table}
     JWT_SECRET: ${file(./serverless.env.yml):${self:provider.stage}.jwt_secret}
 
   iamRoleStatements:
@@ -19,10 +26,7 @@ provider:
     - "dynamodb:PutItem"
     - "dynamodb:Query"
     - "dynamodb:UpdateItem"
-    Resource:
-    - Fn::GetAtt:
-      - MoviesTable
-      - Arn
+    Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${file(./serverless.env.yml):${self:provider.stage}.table}"
 
 plugins:
 - serverless-offline
@@ -37,6 +41,9 @@ plugins:
 #    - include-me-dir/**
 
 functions:
+  authorizer:
+    handler: functions/Auth.authorizer
+
   updateSerie:
     handler: functions/Serie.updateSerie
     timeout: 10
@@ -44,6 +51,9 @@ functions:
     - httpApi:
         path: /series/{id}
         method: put
+        authorizer:
+          name: Authorizer
+
   getSerieById:
     handler: functions/Serie.getSerieById
     timeout: 10
@@ -51,18 +61,26 @@ functions:
     - httpApi:
         path: /series/{id}
         method: get
+        authorizer:
+          name: Authorizer
+
   getSeries:
     handler: functions/Serie.getSeries
     events:
     - httpApi:
         path: /series
         method: get
+        authorizer:
+          name: Authorizer
+
   createSerie:
     handler: functions/Serie.createSerie
     events:
     - httpApi:
         path: /series
         method: post
+        authorizer:
+          name: Authorizer
 
   createSeason:
     handler: functions/Season.createSeason
@@ -70,6 +88,8 @@ functions:
     - httpApi:
         path: /series/{id}/seasons
         method: post
+        authorizer:
+          name: Authorizer
 
   updateSeason:
     handler: functions/Season.updateSeason
@@ -77,6 +97,8 @@ functions:
     - httpApi:
         path: /series/{serieId}/seasons/{id}
         method: put
+        authorizer:
+          name: Authorizer
 
   createEpisode:
     handler: functions/Episode.createEpisode
@@ -84,6 +106,8 @@ functions:
     - httpApi:
         path: /series/{serieId}/seasons/{seasonId}/episodes
         method: post
+        authorizer:
+          name: Authorizer
 
   updateEpisode:
     handler: functions/Episode.updateEpisode
@@ -91,6 +115,8 @@ functions:
     - httpApi:
         path: /series/{serieId}/seasons/{seasonId}/episodes/{id}
         method: put
+        authorizer:
+          name: Authorizer
 
   createPlatform:
     handler: functions/Platform.createPlatform
@@ -98,6 +124,8 @@ functions:
     - httpApi:
         path: /series/{id}/platforms
         method: post
+        authorizer:
+          name: Authorizer
 
   updatePlatform:
     handler: functions/Platform.updatePlatform
@@ -105,6 +133,8 @@ functions:
     - httpApi:
         path: /series/{serieId}/platforms/{id}
         method: put
+        authorizer:
+          name: Authorizer
 
   createActor:
     handler: functions/Actor.createActor
@@ -112,6 +142,8 @@ functions:
     - httpApi:
         path: /series/{id}/actors
         method: post
+        authorizer:
+          name: Authorizer
 
   updateActor:
     handler: functions/Actor.updateActor
@@ -119,6 +151,8 @@ functions:
     - httpApi:
         path: /series/{serieId}/actors/{id}
         method: put
+        authorizer:
+          name: Authorizer
 
   createUser:
     handler: functions/Auth.createUser
@@ -133,7 +167,6 @@ functions:
     - httpApi:
         path: /auth/users/login
         method: post
-
 
 resources:
   Resources:
