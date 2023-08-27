@@ -5,18 +5,17 @@ import Serie from "../entities/Serie";
 import { getValidationErrors } from "../utils/Validator";
 import ErrorCodeMessage from "../config/ErrorCodeMessage";
 import HandlerResponseException from "../utils/HandlerResponseExeption";
+import SerieService from "../services/Serie";
+
+const serieService = new SerieService(
+  new Serie(undefined, undefined, undefined)
+);
 
 export const getSerieById = async (event: { [key: string]: any }) => {
   const id = event.pathParameters.id;
 
   try {
-    const serie = await new Serie("", "", id);
-    const hasSerie = await serie.hasSerieById(id);
-    if (!hasSerie) {
-      throw new Error(ErrorCodeMessage.SERIE_NOT_FOUND);
-    }
-  
-    const serieReturned = await serie.findById(id)
+    const serieReturned = await serieService.findById(id);
     return {
       statusCode: 200,
       body: JSON.stringify(
