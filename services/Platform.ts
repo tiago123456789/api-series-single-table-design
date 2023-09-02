@@ -1,38 +1,33 @@
 import ErrorCodeMessage from "../config/ErrorCodeMessage";
 import Platform from "../entities/Platform";
-import Serie from "../entities/Serie";
+import PlatformRepositoryInterface from "../repositories/Platform.interface";
+import SerieRepositoryInterface from "../repositories/Serie.interface";
 
 class PlatformService {
 
     constructor(
-        private readonly platform: Platform,
-        private readonly serie: Serie
+        private readonly platformRepository: PlatformRepositoryInterface,
+        private readonly serieRepository: SerieRepositoryInterface
     ) {}
     
     async create(serieId: string, newPlatfom: Platform) {
-        const hasSerie = await this.serie.hasSerieById(serieId);
+        const hasSerie = await this.serieRepository.hasSerieById(serieId);
 
         if (!hasSerie) {
             throw new Error(ErrorCodeMessage.SERIE_NOT_FOUND)
         }
 
-        this.platform.name = newPlatfom.name;
-        this.platform.serieId = serieId;
-
-
-        await this.platform.create()
+        await this.platformRepository.create(serieId, newPlatfom)
     }
 
     async update(serieId: string, id: string, platformModified: Platform) {
-        const hasSerie = await this.serie.hasSerieById(serieId);
+        const hasSerie = await this.serieRepository.hasSerieById(serieId);
 
         if (!hasSerie) {
             throw new Error(ErrorCodeMessage.SERIE_NOT_FOUND)
         }
 
-        this.platform.name = platformModified.name;
-        this.platform.serieId = serieId;
-        await this.platform.update(`Actor#${id}`, platformModified)
+        await this.platformRepository.update(serieId, id, platformModified)
     }
 }
 

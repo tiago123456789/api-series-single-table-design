@@ -3,12 +3,15 @@
 import * as yup from "yup";
 import Serie from "../entities/Serie";
 import { getValidationErrors } from "../utils/Validator";
-import ErrorCodeMessage from "../config/ErrorCodeMessage";
 import HandlerResponseException from "../utils/HandlerResponseExeption";
 import SerieService from "../services/Serie";
+import SerieRepository from "../repositories/Serie";
 
-const serieService = new SerieService(
+const serieRepository = new SerieRepository(
   new Serie(undefined, undefined, undefined)
+)
+const serieService = new SerieService(
+  serieRepository
 );
 
 export const getSerieById = async (event: { [key: string]: any }) => {

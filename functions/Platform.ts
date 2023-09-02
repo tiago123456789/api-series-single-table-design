@@ -6,10 +6,18 @@ import Platform from "../entities/Platform";
 import PlatformService from "../services/Platform";
 import Serie from "../entities/Serie";
 import HandlerResponseException from "../utils/HandlerResponseExeption";
+import PlatformRepository from "../repositories/Platform";
+import SerieRepository from "../repositories/Serie";
 
-const platformService = new PlatformService(
+const platformRepository = new PlatformRepository(
   new Platform(undefined, undefined),
+)
+const serieRepository = new SerieRepository(
   new Serie(undefined, undefined, undefined)
+)
+const platformService = new PlatformService(
+  platformRepository,
+  serieRepository
 );
 
 export const createPlatform = async (event: { [key: string]: any }) => {
