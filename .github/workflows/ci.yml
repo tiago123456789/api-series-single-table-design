@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+
+    - name: Install packages
+      run: npm i
+
+    - name: Run unit tests
+      run: npm run test
+
+    - name: "Notify via Discord"
+      uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: 'The unit tests the **auth** service is ${{ job.status }}.'

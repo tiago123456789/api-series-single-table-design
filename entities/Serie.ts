@@ -44,7 +44,7 @@ export default class Serie extends Base {
       await client
         .putItem({
           // @ts-ignore
-          TableName: 'MoviesTable',
+          TableName: process.env.TABLE_NAME,
           Item: this.toItem(),
         })
         .promise();
@@ -60,7 +60,8 @@ export default class Serie extends Base {
       // @ts-ignore
       const registers = await client
         .query({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           KeyConditionExpression: 'PK = :pk',
           ExpressionAttributeValues: {
             ':pk': { S: this.pk },
@@ -87,7 +88,8 @@ export default class Serie extends Base {
       // @ts-ignore
       const registers = await client
         .query({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           KeyConditionExpression: 'PK = :pk and SK = :sk',
           ExpressionAttributeValues: {
             ':pk': { S: this.pk },
@@ -98,7 +100,8 @@ export default class Serie extends Base {
 
       const seasonsAndEpisodes = await client
         .query({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           KeyConditionExpression: 'PK = :pk',
           ExpressionAttributeValues: {
             ':pk': { S: `${this.pk}#${this.sk}` },
@@ -183,7 +186,8 @@ export default class Serie extends Base {
       // @ts-ignore
       const registers = await client
         .query({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           KeyConditionExpression: 'PK = :pk and SK = :sk',
           ExpressionAttributeValues: {
             ':pk': { S: this.pk },
@@ -208,7 +212,8 @@ export default class Serie extends Base {
       // @ts-ignore
       await client
         .updateItem({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           Key: keys,
           UpdateExpression: 'SET #name = :name, #description = :description',
           ExpressionAttributeNames: {

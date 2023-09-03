@@ -9,6 +9,7 @@ class SerieRepository implements SerieRepositoryInterface {
   }
 
   findById(id: string): Promise<{ [key: string]: any }> {
+    this.serie.id = id;
     return this.serie.findById(id);
   }
 }

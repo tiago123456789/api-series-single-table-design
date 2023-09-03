@@ -12,7 +12,6 @@ const serieService = new SerieService(serieRepository);
 
 export const getSerieById = async (event: { [key: string]: any }) => {
   const { id } = event.pathParameters;
-
   try {
     const serieReturned = await serieService.findById(id);
     return {

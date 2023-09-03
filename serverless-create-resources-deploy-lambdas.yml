@@ -9,7 +9,7 @@ provider:
   httpApi:
     authorizers:
       Authorizer:
-        payloadVersion: 2.0
+        payloadVersion: '2.0'
         enableSimpleResponses: true
         type: request
         functionName: authorizer
@@ -36,6 +36,7 @@ package:
   patterns:
   - '!jest.config.ts'
   - '!tests/**'
+  - "!.github/**"
   - '!build/tests/**'
   - '!build/tests/jest.config.js'
   - '!build/tests/jest.config.js.map'

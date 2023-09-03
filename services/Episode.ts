@@ -19,6 +19,7 @@ class EpisodeService {
     }
 
     const hasSeason = await this.seasonRepository.hasSeasonById(
+      serieId,
       `Season#${seasonId}`,
     );
     if (!hasSeason) {
@@ -41,6 +42,7 @@ class EpisodeService {
     }
 
     const hasSeason = await this.seasonRepository.hasSeasonById(
+      serieId,
       `Season#${seasonId}`,
     );
     if (!hasSeason) {

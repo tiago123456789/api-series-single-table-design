@@ -4,7 +4,8 @@ import SeasonRepositoryInterface from './Season.interface';
 class SeasonRepository implements SeasonRepositoryInterface {
   constructor(private readonly season: Season) {}
 
-  hasSeasonById(id: string): Promise<boolean> {
+  hasSeasonById(serieId: string, id: string): Promise<boolean> {
+    this.season.serieId = serieId;
     return this.season.hasSeasonById(id);
   }
 

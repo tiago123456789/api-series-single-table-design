@@ -13,7 +13,7 @@ class AuthRepository implements AuthRepositoryInterface {
   async findByEmail(email: string): Promise<any> {
     const user: User = new User(email, undefined);
 
-    return user.findByEmail(email);
+    return user.findByEmail();
   }
 }
 

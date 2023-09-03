@@ -35,7 +35,8 @@ export default class User extends Base {
       // @ts-ignore
       const registers = await client
         .query({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           KeyConditionExpression: 'PK = :pk',
           ExpressionAttributeValues: {
             ':pk': { S: this.pk },
@@ -65,7 +66,7 @@ export default class User extends Base {
       await client
         .putItem({
           // @ts-ignore
-          TableName: 'MoviesTable',
+          TableName: process.env.TABLE_NAME,
           Item: this.toItem(),
         })
         .promise();
@@ -84,7 +85,8 @@ export default class User extends Base {
       // @ts-ignore
       await client
         .updateItem({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           Key: keys,
           UpdateExpression: 'SET #email = :email',
           ExpressionAttributeNames: {

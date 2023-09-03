@@ -64,7 +64,7 @@ export default class Episode extends Base {
       await client
         .putItem({
           // @ts-ignore
-          TableName: 'MoviesTable',
+          TableName: process.env.TABLE_NAME,
           Item: this.toItem(),
         })
         .promise();
@@ -82,7 +82,8 @@ export default class Episode extends Base {
       // @ts-ignore
       await client
         .updateItem({
-          TableName: 'MoviesTable',
+          // @ts-ignore
+          TableName: process.env.TABLE_NAME,
           Key: keys,
           UpdateExpression:
             'SET #title = :title, #description = :description, #video = :video, #thumb = :thumb',
