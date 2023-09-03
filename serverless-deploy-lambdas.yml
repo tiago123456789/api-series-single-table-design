@@ -32,13 +32,13 @@ plugins:
 - serverless-offline
 - serverless-plugin-typescript
 
-# you can add packaging information here
-#package:
-#  patterns:
-#    - '!exclude-me.js'
-#    - '!exclude-me-dir/**'
-#    - include-me.js
-#    - include-me-dir/**
+package:
+  patterns:
+  - '!jest.config.ts'
+  - '!tests/**'
+  - '!build/tests/**'
+  - '!build/tests/jest.config.js'
+  - '!build/tests/jest.config.js.map'
 
 functions:
   authorizer:

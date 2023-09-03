@@ -1,28 +1,20 @@
-import User from "../entities/User";
-import AuthRepositoryInterface from "./Auth.interface";
+import User from '../entities/User';
+import AuthRepositoryInterface from './Auth.interface';
 
 class AuthRepository implements AuthRepositoryInterface {
+  constructor(private readonly user: User) {}
 
-    constructor(
-        private readonly user: User,
-    ) { }
+  async register(email: string, password: string): Promise<void> {
+    this.user.email = email;
+    this.user.password = password;
+    await this.user.create();
+  }
 
-    async register(email: string, password: string): Promise<void> {
-        this.user.email = email;
-        this.user.password = password;
-        await this.user.create()
-    }
+  async findByEmail(email: string): Promise<any> {
+    const user: User = new User(email, undefined);
 
-    async findByEmail(email: string): Promise<any> {
-        const user: User = new User(
-            email,
-            undefined
-        )
-
-        return user.findByEmail(email);
-    }
-
+    return user.findByEmail(email);
+  }
 }
 
 export default AuthRepository;
-
