@@ -37,6 +37,8 @@ package:
   - '!jest.config.ts'
   - '!tests/**'
   - "!.github/**"
+  - "!Insomnia_2023-09-03.json"
+  - "!archtiecture-api-movie.png"
   - '!build/tests/**'
   - '!build/tests/jest.config.js'
   - '!build/tests/jest.config.js.map'
