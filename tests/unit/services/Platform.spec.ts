@@ -59,7 +59,7 @@ describe("PlatformService unit tests", () => {
     })
 
 
-    it("Should be throw exception when try update platform to serie not exist", async () => {
+    it("Should be throw exception when try update platform to serie", async () => {
         const platformService = new PlatformService(
             platformRepository,
             serieRepository

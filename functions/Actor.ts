@@ -6,10 +6,19 @@ import Actor from "../entities/Actor";
 import ActorService from "../services/Actor";
 import Serie from "../entities/Serie";
 import HandlerResponseException from "../utils/HandlerResponseExeption";
+import ActorRepository from "../repositories/Actor";
+import SerieRepository from "../repositories/Serie";
 
-const actorService = new ActorService(
+const actorRepository = new ActorRepository(
   new Actor(undefined, undefined, undefined),
+)
+
+const serieRepository = new SerieRepository(
   new Serie(undefined, undefined, undefined)
+)
+const actorService = new ActorService(
+  actorRepository,
+  serieRepository
 )
 
 export const createActor = async (event: { [key: string]: any }) => {

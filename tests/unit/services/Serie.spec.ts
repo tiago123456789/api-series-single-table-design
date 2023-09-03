@@ -1,5 +1,4 @@
 import ErrorCodeMessage from "../../../config/ErrorCodeMessage";
-import Serie from "../../../entities/Serie";
 import SerieRepositoryInterface from "../../../repositories/Serie.interface";
 import SerieService from "../../../services/Serie"
 

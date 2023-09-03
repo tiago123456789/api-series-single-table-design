@@ -3,7 +3,7 @@ import ErrorCodeMessage from "../config/ErrorCodeMessage"
 class HandlerResponseException {
 
     static handle(error: Error): { [key: string]: any } {
-        if (error.message === ErrorCodeMessage.INVALID_MESSAGE) {
+        if (error.message === ErrorCodeMessage.INVALID_CREDENTIAL) {
             return {
                 statusCode: 401,
                 body: JSON.stringify(

@@ -1,33 +1,26 @@
 import ErrorCodeMessage from "../config/ErrorCodeMessage";
-import User from "../entities/User";
-import Encrypter from "../utils/Encrypter";
-import Token from "../utils/Token";
+import AuthRepositoryInterface from "../repositories/Auth.interface";
+import { EncrypterInterface } from "../utils/Encrypter";
+import { TokenInterface } from "../utils/Token";
 
 class AuthService {
 
     constructor(
-        private readonly user: User,
-        private readonly encrypter: Encrypter,
-        private readonly token: Token
+        private readonly authRepository: AuthRepositoryInterface,
+        private readonly encrypter: EncrypterInterface,
+        private readonly token: TokenInterface
     ) { }
 
     async register(email: string, password: string): Promise<void> {
         password = await this.encrypter.getHash(password)
-        this.user.email = email;
-        this.user.password = password;
-        await this.user.create()
+        await this.authRepository.register(email, password)
     }
 
     async login(email: string, password: string) {
-        const user: User = new User(
-            email,
-            password
-        )
-
-        const userByEmail = await user.findByEmail(email);
+        const userByEmail = await this.authRepository.findByEmail(email);
 
         if (!userByEmail) {
-            throw new Error(ErrorCodeMessage.INVALID_MESSAGE);
+            throw new Error(ErrorCodeMessage.INVALID_CREDENTIAL);
         }
 
         const isValidPassword = await this.encrypter.compare(
@@ -36,7 +29,7 @@ class AuthService {
         );
 
         if (!isValidPassword) {
-            throw new Error(ErrorCodeMessage.INVALID_MESSAGE);
+            throw new Error(ErrorCodeMessage.INVALID_CREDENTIAL);
         }
 
         const accessToken = await this.token.get({

@@ -1,6 +1,12 @@
 import bcryptjs from "bcryptjs"
 
-class Encrypter {
+export interface EncrypterInterface {
+    getHash(value: string): Promise<string> ;
+    compare(value: string, hash: string): Promise<boolean>;
+}
+
+
+class Encrypter implements EncrypterInterface {
 
     getHash(value: string): Promise<string> {
         return bcryptjs.hash(value, 8)

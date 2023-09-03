@@ -7,15 +7,30 @@ import EpisodeService from "../services/Episode";
 import Season from "../entities/Season";
 import Serie from "../entities/Serie";
 import HandlerResponseException from "../utils/HandlerResponseExeption";
+import EpisodeRepository from "../repositories/Episode";
+import SeasonRepository from "../repositories/Season";
+import SerieRepository from "../repositories/Serie";
 
-const episodeService = new EpisodeService(
+const episodeRepository = new EpisodeRepository(
   new Episode(
     undefined, undefined, undefined,
     undefined, undefined, undefined,
     undefined
   ),
+)
+
+const seasonRepository = new SeasonRepository(
   new Season(undefined, undefined),
+)
+
+const serieRepository = new SerieRepository(
   new Serie(undefined, undefined, undefined)
+)
+
+const episodeService = new EpisodeService(
+  episodeRepository,
+  seasonRepository,
+  serieRepository
 );
 
 export const createEpisode = async (event: { [key: string]: any }) => {

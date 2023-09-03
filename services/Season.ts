@@ -1,7 +1,5 @@
 import ErrorCodeMessage from "../config/ErrorCodeMessage";
 import Season from "../entities/Season";
-import Serie from "../entities/Serie";
-import SeasonRepository from "../repositories/Season";
 import SeasonRepositoryInterface from "../repositories/Season.interface";
 import SerieRepositoryInterface from "../repositories/Serie.interface";
 

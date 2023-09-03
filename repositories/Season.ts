@@ -1,11 +1,14 @@
 import Season from "../entities/Season";
 import SeasonRepositoryInterface from "./Season.interface";
-import SeasonInterface from "./Season.interface";
 
 class SeasonRepository implements SeasonRepositoryInterface {
 
     constructor(private readonly season: Season,
     ) {}
+
+    hasSeasonById(id: string): Promise<boolean> {
+        return this.season.hasSeasonById(id);
+    }
 
     async create(serieId: string, newSeason: Season): Promise<void> {
         this.season.name = newSeason.name;

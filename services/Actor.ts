@@ -1,42 +1,36 @@
 import ErrorCodeMessage from "../config/ErrorCodeMessage";
 import Actor from "../entities/Actor";
-import Serie from "../entities/Serie";
+import ActorRepositoryInterface from "../repositories/Actor.interface";
+import SerieRepositoryInterface from "../repositories/Serie.interface";
 
 class ActorService {
 
     constructor(
-        private readonly actor: Actor,
-        private readonly serie: Serie,    
+        private readonly actorRepository: ActorRepositoryInterface,
+        private readonly serieRepository: SerieRepositoryInterface,    
     ) {
 
     }
 
     async create(serieId: string, data: Actor) {
-        const hasSerie = await this.serie.hasSerieById(serieId);
+        const hasSerie = await this.serieRepository.hasSerieById(serieId);
 
         if (!hasSerie) {
             throw new Error(ErrorCodeMessage.SERIE_NOT_FOUND)
         }
 
-        this.actor.name = data.name;
-        this.actor.image = data.image;
-        this.actor.serieId = serieId;
 
-        await this.actor.create()
+        await this.actorRepository.create(serieId, data);
     }
 
     async update(serieId: string, id: string, actorModified: Actor) {
-        const hasSerie = await this.serie.hasSerieById(serieId);
+        const hasSerie = await this.serieRepository.hasSerieById(serieId);
 
         if (!hasSerie) {
             throw new Error(ErrorCodeMessage.SERIE_NOT_FOUND)
         }
 
-        this.actor.name = actorModified.name;
-        this.actor.image = actorModified.image;
-        this.actor.serieId = serieId;
-
-        await this.actor.update(`Actor#${id}`, actorModified)
+        await this.actorRepository.update(serieId, id , actorModified)
     }
 }
 

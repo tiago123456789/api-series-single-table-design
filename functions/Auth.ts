@@ -9,12 +9,17 @@ import Token from "../utils/Token";
 import AuthService from "../services/Auth";
 import ErrorCodeMessage from "../config/ErrorCodeMessage";
 import HandlerResponseException from "../utils/HandlerResponseExeption";
+import AuthRepository from "../repositories/Auth";
 
 const encrypter = new Encrypter();
 const token = new Token();
 
-const authService = new AuthService(
+const authRepository = new AuthRepository(
   new User(undefined, undefined),
+);
+
+const authService = new AuthService(
+  authRepository,
   encrypter,
   token
 )

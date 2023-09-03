@@ -11,6 +11,7 @@ describe("Season unit tests", () => {
 
     beforeEach(() => {
         seasonRepository = {
+            hasSeasonById: jest.fn(),
             create: jest.fn(),
             update: jest.fn()
         }

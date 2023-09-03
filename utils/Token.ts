@@ -4,7 +4,12 @@ export interface PayloadToken {
     email: string
 }
 
-class Token {
+export interface TokenInterface {
+    isValid(token: string): Promise<boolean>;
+    get(payload: PayloadToken): string;
+}
+
+class Token implements TokenInterface {
 
     async isValid(token: string) {
         try {
