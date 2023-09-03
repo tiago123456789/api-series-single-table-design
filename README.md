@@ -27,7 +27,7 @@ I created this project to study about how to model Dynamodb using single table d
 
 ## Architecture
 
-![the project architecture](./archtiecture-api-movie.pn "The project architecture")
+![the project architecture](./archtiecture-api-movie.png "The project architecture")
 
 
 ## Extra
