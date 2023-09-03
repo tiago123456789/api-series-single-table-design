@@ -21,4 +21,4 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: 'The unit tests the **auth** service is ${{ job.status }}.'
+        args: 'The unit tests the **api-movies-single-table-design** service is ${{ job.status }}.'
