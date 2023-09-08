@@ -23,6 +23,7 @@ I created this project to study about how to model Dynamodb using single table d
 - Execute command **npm run deploy:production** use this command when is your second time to deploy your application in production environment.
 - Execute command **npm run deploy:staging** use this command when is your second time to deploy your application in staging environment.
 - Execute command **npm run start:dev** to run lambda function locally. WARN: you need deploy application one time to create Dynamodb table.
+- Execute command **npm run test** to run unit tests the api.
 
 
 ## Architecture
